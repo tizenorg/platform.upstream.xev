@@ -1,3 +1,5 @@
+%bcond_with x
+
 Summary: print contents of X events
 Name: xev
 Version: 1.2.1
@@ -13,6 +15,10 @@ BuildRequires: pkgconfig(xpm) pkgconfig(xt) pkgconfig(xtst) pkgconfig(xv)
 BuildRequires: pkgconfig(xxf86dga) pkgconfig(xxf86vm)
 BuildRequires: pkgconfig(xcb) pkgconfig(xcb-atom)
 
+%if !%{with x}
+ExclusiveArch:
+%endif
+
 %description
 Xev creates a window and then asks the X server to  send  it  events  whenever
 anything happens to the window (such as it being moved, resized, typed in,
@@ -25,8 +31,8 @@ not be needed in normal usage.
 %setup -q
 
 %build
-%configure
-make
+%autogen --disable-static
+make %{?_smp_mflags}
 
 %install
 rm -rf $RPM_BUILD_ROOT
